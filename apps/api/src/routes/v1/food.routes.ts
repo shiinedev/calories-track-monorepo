@@ -3,9 +3,9 @@ import {
   scanFood,
   analyzeImage,
   discardAnalyzedFood,
-} from "@/controller/food.controller";
-import { requireToken } from "@/middleware/auth";
-import { upload } from "@/middleware/upload";
+} from "@/controller/food.controller.js";
+import { requireToken } from "@/middleware/auth.js";
+import { upload } from "@/middleware/upload.js";
 import { Router } from "express";
 
 const foodRoutes = Router();

@@ -1,10 +1,10 @@
 import express from "express";
 import { initLogger } from "evlog";
 import { evlog } from "evlog/express";
-import V1routes from "./routes";
+import V1routes from "@/routes/index.js";
 import cors from "cors";
-import { notFound } from "./middleware/not-found";
-import { errorHandler } from "./middleware/error";
+import { notFound } from "@/middleware/not-found.js";
+import { errorHandler } from "@/middleware/error.js";
 
 initLogger({
   env: { service: "colorie-track-api" },

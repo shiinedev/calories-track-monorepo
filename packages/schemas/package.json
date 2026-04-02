@@ -4,11 +4,8 @@
   "private": true,
   "description": "",
   "main": "dist/index.js",
+  "type": "module",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "default": "./dist/index.js"
-    },
     "./authSchema": "./src/auth.schema.ts",
     "./foodSchema": "./src/food.schema.ts"
   },
@@ -27,7 +24,6 @@
     "@calorie-track/eslint-config": "workspace:*"
   },
   "dependencies": {
-    "zod": "^4.3.6",
-    "@calorie-track/types": "workspace:*"
+    "zod": "^4.3.6"
   }
 }

@@ -1,4 +1,4 @@
-import FoodModel from "@/models/food.model";
+import FoodModel from "@/models/food.model.js";
 import {
   DailyData,
   DailyTotals,
@@ -15,8 +15,8 @@ import {
   CalculateMacrosResult,
   IReport,
   PrepareMacrosInput,
-} from "@/types/report.types";
-import { initilDailySummary } from "@/utils/constants";
+} from "@/types/report.types.js";
+import { initilDailySummary } from "@/utils/constants.js";
 import { log } from "evlog";
 import { Types } from "mongoose";
 
@@ -300,7 +300,7 @@ export class ReportService implements IReport {
 
       // avarage
       const avgCalories = this.calculatePercentage(
-        result?.dailyStats?.length! || 0,
+        result?.dailyStats?.length ?? 0,
         overallStats.totalCalories,
       );
 

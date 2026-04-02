@@ -1,6 +1,10 @@
-import { getMe, loginUser, registerUser } from "@/controller/auth.controller";
-import { requireToken } from "@/middleware/auth";
-import { validateSchema } from "@/middleware/validate-schema";
+import {
+  getMe,
+  loginUser,
+  registerUser,
+} from "@/controller/auth.controller.js";
+import { requireToken } from "@/middleware/auth.js";
+import { validateSchema } from "@/middleware/validate-schema.js";
 import { loginSchema, registerSchema } from "@calorie-track/schemas/authSchema";
 import { Router } from "express";
 

@@ -1,4 +1,4 @@
-import { reportService } from "@/services/report.service";
+import { reportService } from "@/services/report.service.js";
 import { log } from "evlog";
 import type { Request, Response } from "express";
 import { subDays, addDays, format, startOfMonth, endOfMonth } from "date-fns";
@@ -182,6 +182,10 @@ export const getMonthlyReport = async (req: Request, res: Response) => {
       chartDate: summary.dailyData,
     });
   } catch (error) {
+    log.error({
+      message: "Failed to get Monthly report",
+      error,
+    });
     res.status(500).json({
       message: "Internal Server error",
     });

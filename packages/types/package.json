@@ -4,6 +4,7 @@
   "description": "types for calorie-track app",
   "private": true,
   "main": "dist/index.js",
+  "type": "module",
   "exports": {
     "./auth.types.ts": "./src/auth.types.ts",
     "./report.types.ts": "./src/report.type.ts"

@@ -15,7 +15,7 @@ export type MealType = z.infer<typeof MealTypeSchema>;
 
 export type FoodAnalysisResult = z.infer<typeof FoodAnalysisSchema>;
 
-const saveFoodEntrySchema = FoodAnalysisSchema.extend({
+export const saveFoodEntrySchema = FoodAnalysisSchema.extend({
   storageKey: z.string().describe("The storage key for the food entry"),
 });
 
