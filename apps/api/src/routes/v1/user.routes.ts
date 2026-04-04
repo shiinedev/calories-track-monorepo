@@ -1,7 +1,11 @@
-import { getMe, loginUser, registerUser } from "@/controller/auth.controller";
-import { requireToken } from "@/middleware/auth";
-import { validateSchema } from "@/middleware/validate-schema";
-import { loginSchema, registerSchema } from "@/schema/auth.schema";
+import {
+  getMe,
+  loginUser,
+  registerUser,
+} from "../../controller/auth.controller";
+import { requireToken } from "../../middleware/auth";
+import { validateSchema } from "../../middleware/validate-schema";
+import { loginSchema, registerSchema } from "../../schema/auth.schema";
 import { Router } from "express";
 
 const userRouter = Router();

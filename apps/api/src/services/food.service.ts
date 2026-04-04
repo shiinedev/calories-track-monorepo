@@ -3,16 +3,16 @@ import {
   FoodAnalysisResult,
   FoodAnalysisSchema,
   SaveFoodEntryResult,
-} from "@/schema/food.schema";
+} from "../schema/food.schema";
 import sharp from "sharp";
 import crypto from "crypto";
-import { env } from "@/config/env";
+import { env } from "../config/env";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
-import { r2Config } from "@/config/r2";
+import { r2Config } from "../config/r2";
 import { OpenAI } from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
-import FoodModel, { IFoodModel } from "@/models/food.model";
-import type { ImageType, ScanFoodReturn, IFood } from "@/types/food.types";
+import FoodModel, { IFoodModel } from "../models/food.model";
+import type { ImageType, ScanFoodReturn, IFood } from "../types/food.types";
 
 export class FoodService implements IFood {
   private openai = new OpenAI({

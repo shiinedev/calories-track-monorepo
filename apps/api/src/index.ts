@@ -2,8 +2,8 @@ import express from "express";
 import { initLogger } from "evlog";
 import { evlog } from "evlog/express";
 import cors from "cors";
-import { notFound } from "@/middleware/not-found";
-import { errorHandler } from "@/middleware/error";
+import { notFound } from "./middleware/not-found";
+import { errorHandler } from "./middleware/error";
 import V1routes from "./routes";
 
 initLogger({

@@ -1,4 +1,4 @@
-import FoodModel from "@/models/food.model";
+import FoodModel from "../models/food.model";
 import {
   DailyData,
   DailyTotals,
@@ -15,8 +15,8 @@ import {
   CalculateMacrosResult,
   IReport,
   PrepareMacrosInput,
-} from "@/types/report.types";
-import { initilDailySummary } from "@/utils/constants";
+} from "../types/report.types";
+import { initilDailySummary } from "../utils/constants";
 import { log } from "evlog";
 import { Types } from "mongoose";
 

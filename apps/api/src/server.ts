@@ -1,4 +1,4 @@
-import app from ".";
+import app from "./index";
 import { connectDB } from "@/config/db";
 import { log } from "evlog";
 
