@@ -9,6 +9,9 @@
   "exports": {
     "./report.types.ts": "./src/report.type.ts"
   },
+  "scripts": {
+    "build": "tsc --noEmit"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
