@@ -1,8 +1,8 @@
-import { RegisterSchema, LoginSchema } from "../schema/auth.schema";
-import User, { IUser } from "../models/user.model";
-import { IAuth } from "../types/auth.types";
+import { RegisterSchema, LoginSchema } from "../schema/auth.schema.js";
+import User, { IUser } from "../models/user.model.js";
+import { IAuth } from "../types/auth.types.js";
 import { log } from "evlog";
-import { generateToken } from "../utils/token";
+import { generateToken } from "../utils/token.js";
 
 export class AuthService implements IAuth {
   async register({

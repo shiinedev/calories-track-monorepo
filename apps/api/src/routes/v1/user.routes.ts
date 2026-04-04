@@ -2,10 +2,10 @@ import {
   getMe,
   loginUser,
   registerUser,
-} from "../../controller/auth.controller";
-import { requireToken } from "../../middleware/auth";
-import { validateSchema } from "../../middleware/validate-schema";
-import { loginSchema, registerSchema } from "../../schema/auth.schema";
+} from "../../controller/auth.controller.js";
+import { requireToken } from "../../middleware/auth.js";
+import { validateSchema } from "../../middleware/validate-schema.js";
+import { loginSchema, registerSchema } from "../../schema/auth.schema.js";
 import { Router } from "express";
 
 const userRouter = Router();

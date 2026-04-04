@@ -1,5 +1,5 @@
-import { IUser } from "../models/user.model";
-import type { RegisterSchema, LoginSchema } from "../schema/auth.schema";
+import { IUser } from "../models/user.model.js";
+import type { RegisterSchema, LoginSchema } from "../schema/auth.schema.js";
 
 export interface IAuth {
   register({

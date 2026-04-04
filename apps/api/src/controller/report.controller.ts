@@ -1,4 +1,4 @@
-import { reportService } from "../services/report.service";
+import { reportService } from "../services/report.service.js";
 import { log } from "evlog";
 import type { Request, Response } from "express";
 import { subDays, addDays, format, startOfMonth, endOfMonth } from "date-fns";

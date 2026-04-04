@@ -3,11 +3,11 @@ import {
   scanFood,
   analyzeImage,
   discardAnalyzedFood,
-} from "../../controller/food.controller";
-import { requireToken } from "../../middleware/auth";
-import { upload } from "../../middleware/upload";
-import { validateSchema } from "../../middleware/validate-schema";
-import { saveFoodEntrySchema } from "../../schema/food.schema";
+} from "../../controller/food.controller.js";
+import { requireToken } from "../../middleware/auth.js";
+import { upload } from "../../middleware/upload.js";
+import { validateSchema } from "../../middleware/validate-schema.js";
+import { saveFoodEntrySchema } from "../../schema/food.schema.js";
 import { Router } from "express";
 
 const foodRoutes = Router();
