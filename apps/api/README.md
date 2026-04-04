@@ -176,7 +176,7 @@ TypeScript not loading multer types.
 #### ✅ Fix:
 
 ```bash
-pnpm add -D @types/multer
+pnpm add -D @types/multer 
 ```
 
 OR update `tsconfig`:
@@ -185,6 +185,30 @@ OR update `tsconfig`:
 "types": ["node", "express", "multer"]
 ```
 
+OR use `any as type` then check in your upload middleware:
+```typescript
+export const fileFilter = (
+  req: Request,
+  file: any,
+  cb: FileFilterCallback,
+): void => {
+  const allowedMimiTypes = /jpeg|png|gif|webp|jpg/;
+
+  const extention = allowedMimiTypes.test(path.extname(file.originalname));
+  const mimiType = allowedMimiTypes.test(file.mimetype);
+
+  if (extention && mimiType) {
+    cb(null, true);
+  } else {
+    cb(
+      new Error(
+        "File type not allowed, only jpeg, png, gif, webp, and jpg are allowed",
+      ),
+    );
+  }
+};
+
+````
 ---
 
 ### ❌ 5. Function Invocation Failed (Vercel)
