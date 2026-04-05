@@ -49,7 +49,7 @@ export class AuthService implements IAuth {
         message: "Failed to register user",
         cause: error,
       });
-      throw new Error("Failed to register user", { cause: error });
+      throw new Error(`Failed to register user:${error}`);
     }
   }
 
