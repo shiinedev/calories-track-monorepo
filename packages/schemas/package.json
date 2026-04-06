@@ -6,14 +6,19 @@
   "type": "module",
   "types": "src/index.d.ts",
   "exports": {
+    ".": "./src/index.ts",
     "./auth.schema": "./src/auth.schema.ts",
     "./food.schema": "./src/food.schema.ts"
+  },
+  "scripts": {
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@calorie-track/typescript-config": "workspace:*"
+    "@calorie-track/typescript-config": "workspace:*",
+    "tsup": "^8.5.1"
   },
   "dependencies": {
     "zod": "^4.3.6"
