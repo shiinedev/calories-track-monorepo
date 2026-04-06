@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "zod": "^4.3.6",
-    "tsup": "^8.5.1"
+    "tsup": "^8.5.1",
+    "@calorie-track/typescript-config": "workspace:*"
   }
 }
