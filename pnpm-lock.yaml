@@ -239,6 +239,9 @@ importers:
 
   packages/api-client:
     dependencies:
+      '@calorie-track/schemas':
+        specifier: workspace:*
+        version: link:../schemas
       '@calorie-track/types':
         specifier: workspace:*
         version: link:../types
