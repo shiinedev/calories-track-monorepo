@@ -1,5 +1,8 @@
 import { authService } from "../services/auth.service.js";
-import { LoginSchema, RegisterSchema } from "../schema/auth.schema.js";
+import {
+  LoginSchema,
+  RegisterSchema,
+} from "@calorie-track/schemas/auth.schema";
 import type { Request, Response } from "express";
 
 export const registerUser = async (req: Request, res: Response) => {
