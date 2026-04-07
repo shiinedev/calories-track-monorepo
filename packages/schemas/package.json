@@ -2,17 +2,16 @@
   "name": "@calorie-track/schemas",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "type": "module",
-  "types": "dist/index.d.ts",
+  "types": "src/index.ts",
   "exports": {
     ".": "./src/index.ts",
     "./auth.schema": "./src/auth.schema.ts",
     "./food.schema": "./src/food.schema.ts"
   },
   "scripts": {
-    "check-types": "tsc --noEmit",
-    "build": "tsup"
+    "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",

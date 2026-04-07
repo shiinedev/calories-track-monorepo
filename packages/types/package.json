@@ -7,7 +7,8 @@
   "types": "src/index.ts",
   "type": "module",
   "exports": {
-    "./report.types.ts": "./src/report.type.ts"
+    "./report.types.ts": "./src/report.type.ts",
+    "./user.types": "./src/user.types.ts"
   },
   "keywords": [],
   "author": "shiinedev",

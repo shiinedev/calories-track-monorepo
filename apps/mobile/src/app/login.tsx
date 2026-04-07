@@ -5,9 +5,10 @@ import {
   fontWeight,
   borderRadius,
 } from "@/constants/theme";
+import { useAuth } from "@/context/authContext";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import { useState } from "react";
+import { router, useRouter } from "expo-router";
+import { Activity, useState } from "react";
 import {
   KeyboardAvoidingView,
   ScrollView,
@@ -18,12 +19,28 @@ import {
   TextInput,
   TouchableOpacity,
   Platform,
+  Alert,
+  ActivityIndicator,
 } from "react-native";
 
 export default function Home() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+
+  const { login } = useAuth();
+
+  const handleLogin = async () => {
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both email and password.");
+      return;
+    }
+    try {
+      await login.mutateAsync({ email, password });
+      router.replace("/(tabs)/home");
+    } catch (error) {
+      Alert.alert("Error", "Inavlid Credentials, Please try again.");
+    }
+  };
 
   return (
     <KeyboardAvoidingView
@@ -76,10 +93,15 @@ export default function Home() {
             {/*sign in button */}
             <TouchableOpacity
               style={styles.button}
-              // onPress={() =>
-              // }
+              onPress={handleLogin}
+              disabled={login.isPending}
+              activeOpacity={0.8}
             >
-              <Text style={styles.buttonText}>Login</Text>
+              {login.isPending ? (
+                <ActivityIndicator size="small" color={Colors.white} />
+              ) : (
+                <Text style={styles.buttonText}>Login</Text>
+              )}
             </TouchableOpacity>
             {/*register link */}
             <View style={styles.registerLink}>
