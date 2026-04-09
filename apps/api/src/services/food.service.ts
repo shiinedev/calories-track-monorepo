@@ -1,4 +1,3 @@
-import { log } from "evlog";
 import {
   FoodAnalysisResult,
   FoodAnalysisSchema,
@@ -13,6 +12,7 @@ import { OpenAI } from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import FoodModel, { IFoodModel } from "../models/food.model.js";
 import type { ImageType, ScanFoodReturn, IFood } from "../types/food.types.js";
+import { logger } from "../utils/logger.js";
 
 export class FoodService implements IFood {
   private openai = new OpenAI({
@@ -27,19 +27,19 @@ export class FoodService implements IFood {
     try {
       // Optimize the image before uploading
       const optimizedBuffer = await this.optimizeImage(file);
-      log.info({
+      logger.info({
         message: `Optimized image size: ${optimizedBuffer.length} bytes`,
       });
 
       // Upload the optimized image to R2
       const { url, key } = await this.uploadToR2(optimizedBuffer);
-      log.info({ message: `Uploaded image to R2: ${key}` });
+      logger.info({ message: `Uploaded image to R2: ${key}` });
 
       // Analyze the food using the uploaded image to opena ai
       const result = await this.analyzeFood(url);
-      log.info({ message: `Analyzed food: ${result.foodName}` });
+      logger.info({ message: `Analyzed food: ${result.foodName}` });
 
-      log.info({ message: `userId: ${userId}` });
+      logger.info({ message: `userId: ${userId}` });
 
       // save to databse
       // filter by type
@@ -66,11 +66,11 @@ export class FoodService implements IFood {
         storageKey: key,
       });
 
-      log.info({ message: `Saved food to database: ${food._id}` });
+      logger.info({ message: `Saved food to database: ${food._id}` });
 
       return food as ScanFoodReturn<T>;
     } catch (error) {
-      log.error({ message: `Failed to scan food: ${error}` });
+      logger.error({ message: `Failed to scan food: ${error}` });
       throw error;
     }
   }
@@ -94,7 +94,7 @@ export class FoodService implements IFood {
 
     const optimizedSize = optimizedBuffer.length;
 
-    log.info({
+    logger.info({
       message: `Optimized image size: ${optimizedSize} bytes (original: ${originalSize} bytes)`,
     });
 
@@ -105,7 +105,7 @@ export class FoodService implements IFood {
     const fileName = `${crypto.randomBytes(16).toString("hex")}.jpg`;
 
     const key = `${r2Config.bucket}/${fileName}`;
-    log.info({
+    logger.info({
       message: `BUCKET_NAME : ${r2Config.bucket}`,
     });
 
@@ -119,7 +119,7 @@ export class FoodService implements IFood {
 
       const result = await r2Config.client.send(command);
 
-      log.info({
+      logger.info({
         message: `Uploaded image to R2: ${key}`,
         result,
       });
@@ -129,7 +129,7 @@ export class FoodService implements IFood {
         key,
       };
     } catch (error) {
-      log.error({
+      logger.error({
         message: `Failed to upload image to R2: ${key}`,
         error,
       });
@@ -178,7 +178,7 @@ export class FoodService implements IFood {
 
       throw new Error(`Failed to parse food analysis result for ${imageUrl}`);
     } catch (error) {
-      log.error({
+      logger.error({
         message: `Failed to analyze food: ${imageUrl}`,
         error,
       });
@@ -204,7 +204,7 @@ export class FoodService implements IFood {
       });
       return foodEntry;
     } catch (error) {
-      log.error({
+      logger.error({
         message: `Failed to save food entry`,
         error,
       });
@@ -221,12 +221,12 @@ export class FoodService implements IFood {
 
       const result = await r2Config.client.send(deleteCommand);
 
-      log.info({
+      logger.info({
         message: `Discarded analyzed food: ${storageKey}`,
         result,
       });
     } catch (error) {
-      log.error({
+      logger.error({
         message: `Failed to discard analyzed food: ${storageKey}`,
         error,
       });

@@ -1,8 +1,8 @@
 import { RegisterSchema, LoginSchema } from "../schema/auth.schema.js";
 import User, { IUser } from "../models/user.model.js";
 import { IAuth } from "../types/auth.types.js";
-import { log } from "evlog";
 import { generateToken } from "../utils/token.js";
+import { logger } from "../utils/logger.js";
 
 export class AuthService implements IAuth {
   async register({
@@ -26,7 +26,7 @@ export class AuthService implements IAuth {
       }).select("-password");
 
       if (existingUser) {
-        log.info({
+        logger.info({
           message: "User already exists",
           email: existingUser.email,
         });
@@ -45,7 +45,7 @@ export class AuthService implements IAuth {
 
       return user;
     } catch (error) {
-      log.error({
+      logger.error({
         message: "Failed to register user",
         cause: error,
       });

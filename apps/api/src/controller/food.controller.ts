@@ -1,5 +1,5 @@
+import { logger } from "../utils/logger.js";
 import { foodService } from "../services/food.service.js";
-import { log } from "evlog";
 import type { Request, Response } from "express";
 
 export const scanFood = async (req: Request, res: Response) => {
@@ -11,10 +11,11 @@ export const scanFood = async (req: Request, res: Response) => {
       .json({ error: "No file uploaded, please provide an image" });
   }
 
-  log.info({ message: `user: ${req.user!}` });
+  req.log.info({ message: `user: ${req.user!}` });
 
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
+    req.log.error({ error: "Unauthorized" });
   }
 
   const userId = req.user._id.toString();
@@ -36,7 +37,7 @@ export const analyzeImage = async (req: Request, res: Response) => {
       .json({ error: "No file uploaded, please provide an image" });
   }
 
-  log.info({ message: `user: ${req.user!}` });
+  logger.info({ message: `user: ${req.user!}` });
 
   if (!req.user) {
     return res.status(401).json({ error: "Unauthorized" });
@@ -69,12 +70,14 @@ export const saveFoodEntry = async (req: Request, res: Response) => {
 
 export const discardAnalyzedFood = async (req: Request, res: Response) => {
   if (!req.user) {
+    logger.error({ error: "Unauthorized" });
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   const { storageKey } = req.body;
 
   if (!storageKey) {
+    logger.error({ error: "Storage key is required" });
     return res.status(400).json({ error: "Storage key is required" });
   }
 

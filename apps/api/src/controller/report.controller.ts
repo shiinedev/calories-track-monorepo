@@ -1,11 +1,12 @@
 import { reportService } from "../services/report.service.js";
-import { log } from "evlog";
 import type { Request, Response } from "express";
 import { subDays, addDays, format, startOfMonth, endOfMonth } from "date-fns";
 import { IWeekSummary } from "@calorie-track/types/report.types.ts";
+import { logger } from "../utils/logger.js";
 
 export const getDailyReport = async (req: Request, res: Response) => {
   if (!req.user) {
+    logger.error({ message: "Unauthorized access attempt" });
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -34,7 +35,7 @@ export const getDailyReport = async (req: Request, res: Response) => {
       macros: summary.macros,
     });
   } catch (error) {
-    log.error({
+    logger.error({
       message: "Failed to get daily report",
       error,
     });
@@ -52,7 +53,7 @@ export const getWeeklyReport = async (req: Request, res: Response) => {
   const startedDate = subDays(new Date().setHours(0, 0, 0, 0), 6);
   const endDate = today;
 
-  log.info({
+  logger.info({
     message: "getWeeklyReport Input Date from controller",
     startedDate: startedDate.toISOString(),
     endDate: endDate.toISOString(),
@@ -117,7 +118,7 @@ export const getWeeklyReport = async (req: Request, res: Response) => {
       avgCalories,
     });
   } catch (error) {
-    log.error({
+    logger.error({
       message: "Failed to get weekly report",
       error,
     });
@@ -127,6 +128,7 @@ export const getWeeklyReport = async (req: Request, res: Response) => {
 
 export const getMonthlyReport = async (req: Request, res: Response) => {
   if (!req.user) {
+    logger.error({ message: "Unauthorized access attempt" });
     return res.status(401).json({ message: "Unauthorized" });
   }
 
@@ -143,7 +145,7 @@ export const getMonthlyReport = async (req: Request, res: Response) => {
   const endDate = endOfMonth(targetDate.setHours(23, 59, 59, 599));
   const startedDate = startOfMonth(targetDate.setHours(0, 0, 0, 0));
 
-  log.info({
+  logger.info({
     message: "input from controller",
     started: startedDate.toISOString(),
     ended: endDate.toISOString(),
@@ -182,7 +184,7 @@ export const getMonthlyReport = async (req: Request, res: Response) => {
       chartDate: summary.dailyData,
     });
   } catch (error) {
-    log.error({
+    logger.error({
       message: "Failed to get Monthly report",
       error,
     });

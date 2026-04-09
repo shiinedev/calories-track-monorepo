@@ -1,4 +1,4 @@
-import { log } from "evlog";
+import { logger } from "../utils/logger.js";
 import { Request, Response, NextFunction } from "express";
 import { ZodError, ZodType } from "zod";
 
@@ -14,12 +14,12 @@ export const validateSchema = (schema: ZodType) => {
           path: issue.path.join("."),
           message: issue.message,
         }));
-        log.error({
+        logger.error({
           errors,
         });
         return res.status(400).json({ errors });
       } else {
-        log.error({
+        logger.error({
           error,
           message: error instanceof Error ? error.message : "validation error",
         });

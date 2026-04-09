@@ -1,16 +1,13 @@
-import express from "express";
-import { initLogger } from "evlog";
-import { evlog } from "evlog/express";
+import express, { type Express } from "express";
+import pinoHttp from "pino-http";
 import cors from "cors";
 import { notFound } from "./middleware/not-found.js";
 import { errorHandler } from "./middleware/error.js";
 import V1routes from "./routes/index.js";
+import { logger } from "./utils/logger.js";
 
-initLogger({
-  env: { service: "colorie-track-api" },
-});
+const app: Express = express();
 
-const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
@@ -22,15 +19,21 @@ app.use(
   }),
 );
 
-app.use(evlog());
+// loger
+app.use(pinoHttp({ logger }));
 
 app.get("/health", (req, res) => {
-  req.log.set({
+  req.log.info({
     route: "health",
     status: req.statusCode,
     service: "colorie-track-api",
   });
-  res.json({ ok: true, message: "Api is running!" });
+
+  res.json({
+    ok: true,
+    message: "Api is running!",
+    timestamp: new Date().toISOString(),
+  });
 });
 
 app.use("/api/v1", V1routes);

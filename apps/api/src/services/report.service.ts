@@ -17,7 +17,7 @@ import {
   PrepareMacrosInput,
 } from "../types/report.types.js";
 import { initilDailySummary } from "../utils/constants.js";
-import { log } from "evlog";
+import { logger } from "../utils/logger.js";
 import { Types } from "mongoose";
 
 export class ReportService implements IReport {
@@ -62,14 +62,14 @@ export class ReportService implements IReport {
     const startOfDay = new Date(date);
     startOfDay.setHours(0, 0, 0, 0);
 
-    log.info({
+    logger.info({
       message: `Generating daily report for user ${userId} on ${startOfDay}`,
     });
 
     const endOfDay = new Date(startOfDay);
     endOfDay.setHours(23, 59, 59, 999);
 
-    log.info({ message: `End of day: ${endOfDay}` });
+    logger.info({ message: `End of day: ${endOfDay}` });
     try {
       const [result] = await FoodModel.aggregate<{
         mealStats: IMealStats[];
@@ -103,7 +103,7 @@ export class ReportService implements IReport {
         },
       ]);
 
-      log.info({
+      logger.info({
         message: "Aggregation result",
         result: JSON.stringify(result),
       });
@@ -115,7 +115,7 @@ export class ReportService implements IReport {
 
       if (result && result.overallStats.length > 0) {
         const overall = result.overallStats[0];
-        log.info({
+        logger.info({
           message: "overall stats ",
           overall,
         });
@@ -126,7 +126,7 @@ export class ReportService implements IReport {
         summary.totalFat = overall?.totalFat || 0;
       }
 
-      log.info({
+      logger.info({
         message: "overAll summary",
         totalCalories: summary.totalCalories,
         totalProtein: summary.totalProtein,
@@ -151,7 +151,7 @@ export class ReportService implements IReport {
         }
       });
 
-      log.info({
+      logger.info({
         message: "meal breakdown",
         mealBreakdown: summary.mealBreakdown,
       });
@@ -178,14 +178,14 @@ export class ReportService implements IReport {
         totalMacrosCalories,
       });
 
-      log.info({
+      logger.info({
         message: "macros",
         macros: summary.macros,
       });
 
       return summary;
     } catch (error) {
-      log.error({
+      logger.error({
         message: "Failed to get daily report",
         error,
       });
@@ -199,7 +199,7 @@ export class ReportService implements IReport {
     endDate: Date,
   ): Promise<IWeeklyReportStats> {
     try {
-      log.info({
+      logger.info({
         message: "getWeaklyReport Input Date",
         startDate: startDate.toISOString(),
         endDate: endDate.toISOString(),
@@ -234,7 +234,7 @@ export class ReportService implements IReport {
         },
       ]);
 
-      log.info({
+      logger.info({
         message: "Successfully fetched monthly report",
         result,
       });
@@ -252,7 +252,7 @@ export class ReportService implements IReport {
         };
       });
 
-      log.info({
+      logger.info({
         message: "Daily data",
         dailyData,
       });
@@ -266,7 +266,7 @@ export class ReportService implements IReport {
         totalProtein: 0,
       };
 
-      log.info({
+      logger.info({
         message: "Overall stats",
         overallStats,
       });
@@ -293,7 +293,7 @@ export class ReportService implements IReport {
         totalMacrosCalories,
       });
 
-      log.info({
+      logger.info({
         message: "Macros",
         macros,
       });
@@ -304,7 +304,7 @@ export class ReportService implements IReport {
         overallStats.totalCalories,
       );
 
-      log.info({
+      logger.info({
         message: "Average calories",
         avgCalories,
       });
@@ -316,7 +316,7 @@ export class ReportService implements IReport {
         dailyData,
       };
     } catch (error) {
-      log.error({
+      logger.error({
         message: "Failed to get monthly report",
         error,
       });
@@ -373,7 +373,7 @@ export class ReportService implements IReport {
         },
       ]);
 
-      log.info({
+      logger.info({
         message: "all stats result",
         result,
       });
@@ -391,7 +391,7 @@ export class ReportService implements IReport {
         };
       });
 
-      log.info({
+      logger.info({
         message: "daily stats report",
         dailyData,
       });
@@ -405,7 +405,7 @@ export class ReportService implements IReport {
         totalFat: 0,
       };
 
-      log.info({
+      logger.info({
         message: "overall stats",
         overallStats,
       });
@@ -432,7 +432,7 @@ export class ReportService implements IReport {
         totalMacrosCalories,
       });
 
-      log.info({
+      logger.info({
         message: "macros data",
         macros,
       });
@@ -440,7 +440,7 @@ export class ReportService implements IReport {
       // calculae dailyStats
       const daysTracked = result?.dailyTotals?.length || 0;
 
-      log.info({
+      logger.info({
         message: "days tracked",
         daysTracked,
       });
@@ -452,7 +452,7 @@ export class ReportService implements IReport {
         overallStats.totalCalories,
       );
 
-      log.info({
+      logger.info({
         message: "avrageCalories",
         avgCalories,
       });
@@ -461,7 +461,7 @@ export class ReportService implements IReport {
 
       const highestDay = result?.dailyTotals[0]?.dayCalories || 0;
 
-      log.info({
+      logger.info({
         message: "highest day calories",
         highestDay,
       });
@@ -475,7 +475,7 @@ export class ReportService implements IReport {
         macros,
       };
     } catch (error) {
-      log.info({
+      logger.info({
         messgae: "failed getting monthly report",
         error,
       });
