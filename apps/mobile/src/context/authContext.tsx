@@ -4,6 +4,7 @@ import {
   UpdateProfileInput,
   LoginInput,
   User,
+  AuthResponse,
 } from "@/types";
 import {
   useMutation,
@@ -14,15 +15,29 @@ import {
 import { getAuthToken, saveAuthToken, removeAuthToken } from "@/utils/storage";
 import { createContext, use, useEffect, useState } from "react";
 import { authApi } from "@/services/auth";
-import { ApiResponse } from "@/services/api";
 
 export interface AuthContextType {
   user: UserWithToken | undefined;
   isAuthenticated: boolean;
-  register: UseMutationResult<UserWithToken, Error, RegisterInput, unknown>;
-  login: UseMutationResult<UserWithToken, Error, LoginInput, unknown>;
+  register: UseMutationResult<
+    AuthResponse<UserWithToken>,
+    Error,
+    RegisterInput,
+    unknown
+  >;
+  login: UseMutationResult<
+    AuthResponse<UserWithToken>,
+    Error,
+    LoginInput,
+    unknown
+  >;
   logout: () => void;
-  updateProfile: UseMutationResult<User, Error, UpdateProfileInput, unknown>;
+  updateProfile: UseMutationResult<
+    AuthResponse<User>,
+    Error,
+    UpdateProfileInput,
+    unknown
+  >;
   refetchUser: () => void;
   isLoading: boolean;
 }
@@ -66,6 +81,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     enabled: hasToken && isReady,
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
+    throwOnError: true,
   });
 
   useEffect(() => {
@@ -80,8 +96,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const register = useMutation({
     mutationFn: authApi.register,
     onSuccess: (data) => {
-      if (data.token) {
-        saveAuthToken(data.token);
+      if (data.user.token) {
+        saveAuthToken(data.user.token);
       }
 
       queryClient.setQueryData(["currentUser"], data);
@@ -92,8 +108,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useMutation({
     mutationFn: authApi.login,
     onSuccess: (data) => {
-      if (data.token) {
-        saveAuthToken(data.token);
+      if (data.user.token) {
+        saveAuthToken(data.user.token);
       }
       queryClient.setQueryData(["currentUser"], data);
     },

@@ -1,100 +1,77 @@
-// import { api } from "./api";
-import { API_URL } from "@/constants/config";
+import { api } from "./api";
 import type {
   UserWithToken,
   LoginInput,
   RegisterInput,
   User,
   UpdateProfileInput,
+  AuthResponse,
 } from "@/types";
-import { removeAuthToken } from "@/utils/storage";
-import axios from "axios";
+import { removeAuthToken, saveAuthToken } from "@/utils/storage";
 
 export const authApi = {
   async register(input: RegisterInput) {
     try {
-      const result = await fetch("/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(input),
-      });
-      return result.json();
+      console.log("register  input", input);
+      const result = await api.post<AuthResponse<UserWithToken>>(
+        "auth/register",
+        input,
+      );
+      console.log("result from register", result);
+
+      if (result.user.token) {
+        await saveAuthToken(result.user.token);
+      }
+
+      return result;
     } catch (error) {
       console.error("error register;", error);
       throw error;
     }
   },
   async login(input: LoginInput) {
-    console.log("before fetch login ", input);
-    const result = await fetch(`${API_URL}/auth/login`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(input),
-    });
-
-    console.log("result from login before json", result);
-
-    const text = await result.text();
-    console.log("text from login", text);
-
-    let data: unknown;
+    console.log("login input", input);
     try {
-      data = JSON.parse(text);
-      console.log("json data from login", data);
-    } catch {
-      throw new Error(`Server returned non-JSON: ${text}`);
-    }
+      const result = await api.post<AuthResponse<UserWithToken>>(
+        "/auth/login",
+        input,
+      );
+      console.log("result from loging", result);
 
-    if (!result.ok) {
-      throw new Error((data as any)?.message ?? `HTTP ${result.status}`);
-    }
+      if (result.user.token) {
+        await saveAuthToken(result.user.token);
+      }
 
-    return data;
+      return result;
+    } catch (error) {
+      console.error("error login;", error);
+      throw error;
+    }
   },
-  // async login(input: LoginInput) {
-  //   try {
-  //     const result = await fetch(`${API_URL}/auth/login`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(input),
-  //     });
+  async getCurrentUser() {
+    try {
+      const result = await api.get<AuthResponse<UserWithToken>>("/auth/user");
+      return result.user;
+    } catch (error) {
+      console.error("error getCurrentUser;", error);
+      throw error;
+    }
+  },
 
-  //     console.log("result from loging before json", result);
-  //     return result;
-  //   } catch (error) {
-  //     console.error("error login;", error);
-  //     throw error;
-  //   }
-  // },
-  // async getCurrentUser() {
-  //   try {
-  //     return await api.get<UserWithToken>("/auth/user");
-  //   } catch (error) {
-  //     console.error("error getCurrentUser;", error);
-  //     throw error;
-  //   }
-  // },
-
-  // async updateProfile(input: UpdateProfileInput) {
-  //   try {
-  //     return await api.put<User>("/auth/user", input);
-  //   } catch (error) {
-  //     console.error("error updateProfile;", error);
-  //     throw error;
-  //   }
-  // },
-  // async logout() {
-  //   try {
-  //     return await removeAuthToken();
-  //   } catch (error) {
-  //     console.error("error logout;", error);
-  //     throw error;
-  //   }
-  // },
+  async updateProfile(input: UpdateProfileInput) {
+    try {
+      return await api.put<AuthResponse<User>>("/auth/user", input);
+    } catch (error) {
+      console.error("error updateProfile;", error);
+      throw error;
+    }
+  },
+  async logout() {
+    try {
+      return await removeAuthToken();
+    } catch (error) {
+      console.error("error logout;", error);
+      throw error;
+    }
+  },
 };

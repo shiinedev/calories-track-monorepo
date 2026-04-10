@@ -14,8 +14,8 @@ export const scanFood = async (req: Request, res: Response) => {
   req.log.info({ message: `user: ${req.user!}` });
 
   if (!req.user) {
-    return res.status(401).json({ error: "Unauthorized" });
     req.log.error({ error: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   const userId = req.user._id.toString();
@@ -24,7 +24,7 @@ export const scanFood = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: "Food scanned successfully",
-    result,
+    food: result,
   });
 };
 
@@ -32,6 +32,7 @@ export const analyzeImage = async (req: Request, res: Response) => {
   const { file } = req.body;
 
   if (!file) {
+    req.log.error({ error: "No file uploaded, please provide an image" });
     return res
       .status(400)
       .json({ error: "No file uploaded, please provide an image" });
@@ -40,6 +41,7 @@ export const analyzeImage = async (req: Request, res: Response) => {
   logger.info({ message: `user: ${req.user!}` });
 
   if (!req.user) {
+    req.log.error({ error: "Unauthorized" });
     return res.status(401).json({ error: "Unauthorized" });
   }
 
@@ -49,12 +51,13 @@ export const analyzeImage = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: "Food scanned successfully",
-    result,
+    food: result,
   });
 };
 
 export const saveFoodEntry = async (req: Request, res: Response) => {
   if (!req.user) {
+    req.log.error({ error: "Unauthorized" });
     return res.status(401).json({ error: "Unauthorized" });
   }
 
@@ -64,7 +67,7 @@ export const saveFoodEntry = async (req: Request, res: Response) => {
 
   return res.status(200).json({
     message: "Food entry saved successfully",
-    result,
+    food: result,
   });
 };
 

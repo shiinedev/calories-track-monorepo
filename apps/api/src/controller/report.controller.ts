@@ -26,13 +26,15 @@ export const getDailyReport = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: "Daily report retrieved successfully",
-      goal: req.user.dailyColorieTarget,
-      consumed: summary.totalCalories,
-      remaining: remainingCalories > 0 ? remainingCalories : 0,
-      completedCalories,
-      totalEntries: summary.totalEntries,
-      mealBreakdown: summary.mealBreakdown,
-      macros: summary.macros,
+      data: {
+        goal: req.user.dailyColorieTarget,
+        consumed: summary.totalCalories,
+        remaining: remainingCalories > 0 ? remainingCalories : 0,
+        completedCalories,
+        totalEntries: summary.totalEntries,
+        mealBreakdown: summary.mealBreakdown,
+        macros: summary.macros,
+      },
     });
   } catch (error) {
     logger.error({
@@ -108,14 +110,16 @@ export const getWeeklyReport = async (req: Request, res: Response) => {
 
     res.status(200).json({
       message: "Weekly report retrieved successfully",
-      week: weekSummary,
-      macros,
-      totalCalories,
-      totalCarbs,
-      totalEntries,
-      totalFat,
-      totalProtein,
-      avgCalories,
+      data: {
+        week: weekSummary,
+        macros,
+        totalCalories,
+        totalCarbs,
+        totalEntries,
+        totalFat,
+        totalProtein,
+        avgCalories,
+      },
     });
   } catch (error) {
     logger.error({
@@ -169,19 +173,21 @@ export const getMonthlyReport = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       message: "Monthly report retrieved successfully",
-      targetDate,
-      targetyear: year,
-      targetMonth: month,
-      avgCalories: summary.avgCalories,
-      highestDay: summary.highestDay,
-      daysTracked: summary.daysTracked,
-      macros: summary.macros,
-      totalCalories: summary.totalCalories,
-      totalProtein: summary.totalProtein,
-      totalCarbs: summary.totalCarbs,
-      totalFat: summary.totalFat,
-      totalEntries: summary.totalEntries,
-      chartDate: summary.dailyData,
+      data: {
+        targetDate,
+        targetyear: year,
+        targetMonth: month,
+        avgCalories: summary.avgCalories,
+        highestDay: summary.highestDay,
+        daysTracked: summary.daysTracked,
+        macros: summary.macros,
+        totalCalories: summary.totalCalories,
+        totalProtein: summary.totalProtein,
+        totalCarbs: summary.totalCarbs,
+        totalFat: summary.totalFat,
+        totalEntries: summary.totalEntries,
+        chartDate: summary.dailyData,
+      },
     });
   } catch (error) {
     logger.error({

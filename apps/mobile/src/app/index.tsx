@@ -11,6 +11,7 @@ export default function IndexScreen() {
   useEffect(() => {
     const checkToken = async () => {
       const token = await getAuthToken();
+      console.log("token ", token);
     };
     checkToken();
   }, []);
