@@ -47,7 +47,7 @@ export const analyzeImage = async (req: Request, res: Response) => {
 
   const userId = req.user._id.toString();
 
-  const result = await foodService.scanFood(file.buffer, userId, "base64");
+  const result = await foodService.scanFood(file.buffer, userId, "model");
 
   return res.status(200).json({
     message: "Food scanned successfully",

@@ -13,7 +13,7 @@ import { Router } from "express";
 const foodRoutes = Router();
 
 foodRoutes.post("/scan", requireToken, upload.single("image"), scanFood);
-foodRoutes.post("analyze", requireToken, upload.single("image"), analyzeImage);
+foodRoutes.post("/analyze", requireToken, upload.single("image"), analyzeImage);
 foodRoutes.post(
   "/save",
   requireToken,

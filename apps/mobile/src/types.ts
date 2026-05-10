@@ -46,3 +46,25 @@ export type Feature = {
   title: string;
   text: string;
 };
+
+export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
+
+export interface IFoodResult extends Timestamp {
+  userId: string;
+  foodname: string;
+  calories: number;
+  fat: number;
+  protein: number;
+  carbs: number;
+  mealType: MealType;
+  timestamp: Date;
+  imageURl: string;
+  storageKey: string;
+}
+
+export interface ScanFoodResult extends Omit<
+  IFoodResult,
+  "timestamp" | "userId"
+> {
+  imageBase64: string;
+}
