@@ -3,11 +3,11 @@ import type {
   UserWithToken,
   LoginInput,
   RegisterInput,
-  User,
   UpdateProfileInput,
   AuthResponse,
 } from "@/types";
 import { removeAuthToken, saveAuthToken } from "@/utils/storage";
+import { AxiosError } from "axios";
 
 export const authApi = {
   async register(input: RegisterInput) {
@@ -26,7 +26,10 @@ export const authApi = {
       return result;
     } catch (error) {
       console.error("error register;", error);
-      throw error;
+      throw (
+        (error as AxiosError<{ message: string }>).response?.data?.message ||
+        "Error registering user"
+      );
     }
   },
   async login(input: LoginInput) {
@@ -46,7 +49,10 @@ export const authApi = {
       return result;
     } catch (error) {
       console.error("error login;", error);
-      throw error;
+      throw (
+        (error as AxiosError<{ message: string }>).response?.data?.message ||
+        "Error logging in"
+      );
     }
   },
   async getCurrentUser() {
@@ -55,7 +61,10 @@ export const authApi = {
       return result.user;
     } catch (error) {
       console.error("error getCurrentUser;", error);
-      // throw error;
+      throw (
+        (error as AxiosError<{ message: string }>).response?.data?.message ||
+        "Error getting user"
+      );
     }
   },
 
@@ -65,7 +74,10 @@ export const authApi = {
       return await api.put<void>("/auth/update", input);
     } catch (error) {
       console.error("error updateProfile;", error);
-      throw error;
+      throw (
+        (error as AxiosError<{ message: string }>).response?.data?.message ||
+        "Error update profile user"
+      );
     }
   },
   async logout() {
@@ -73,7 +85,10 @@ export const authApi = {
       return await removeAuthToken();
     } catch (error) {
       console.error("error logout;", error);
-      throw error;
+      throw (
+        (error as AxiosError<{ message: string }>).response?.data?.message ||
+        "Error logout user"
+      );
     }
   },
 };

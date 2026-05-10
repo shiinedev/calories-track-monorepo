@@ -35,7 +35,7 @@ export const Header = ({ username, onLogout }: HeaderProps) => {
 
 const styles = StyleSheet.create({
   header: {
-    paddingTop: 64,
+    paddingTop: 45,
     paddingBottom: spacing.lg,
     paddingHorizontal: spacing.lg,
     backgroundColor: Colors.white,

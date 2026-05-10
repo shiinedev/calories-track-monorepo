@@ -15,7 +15,12 @@ export interface ReponseBase {
   message: string;
 }
 
-export type RegisterInput = Omit<User, "id" | "createdAt" | "updatedAt">;
+export type RegisterInput = Pick<
+  User,
+  "email" | "username" | "dailyColorieTarget"
+> & {
+  password: string;
+};
 export type LoginInput = Pick<User, "email"> & { password: string };
 
 export type UserWithToken = User & { token: string };

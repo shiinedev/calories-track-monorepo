@@ -1,5 +1,4 @@
 import { Header } from "@/components/home/header";
-import { Colors } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
 import { Link, router } from "expo-router";
 import { Text, View, StyleSheet, Alert, StatusBar } from "react-native";
@@ -35,9 +34,6 @@ const Home = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: Colors.white,
   },
 });
 

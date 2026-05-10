@@ -3,26 +3,22 @@ import { router } from "expo-router";
 import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
 
 interface ReplaceLinkProps {
-  to: "login" | "register" | "home";
+  to: "login" | "register";
 }
 
 export const ReplaceLink = ({ to }: ReplaceLinkProps) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Don't have an account? </Text>
+      <Text style={styles.text}>
+        {to === "login"
+          ? "Don't have an account? "
+          : "Already have an account? "}
+      </Text>
       <TouchableOpacity
-        onPress={() =>
-          router.replace(
-            to === "login"
-              ? "/login"
-              : to === "register"
-                ? "/register"
-                : "/home",
-          )
-        }
+        onPress={() => router.replace(to === "login" ? "/login" : "/register")}
       >
         <Text style={styles.LinkText}>
-          {to === "login" ? "Login" : to === "register" ? "Register" : "Home"}
+          {to === "login" ? "Login" : "Register"}
         </Text>
       </TouchableOpacity>
     </View>

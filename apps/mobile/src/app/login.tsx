@@ -95,7 +95,7 @@ export default function Home() {
                 secureTextEntry
               />
             </View>
-            {/*sign in button */}
+            {/*login button */}
             <TouchableOpacity
               style={styles.button}
               onPress={handleLogin}
@@ -110,7 +110,6 @@ export default function Home() {
             </TouchableOpacity>
             {/*register link */}
             <ReplaceLink to="register" />
-            <ReplaceLink to="home" />
           </View>
         </View>
       </ScrollView>
