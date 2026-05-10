@@ -1,19 +1,33 @@
+import { Header } from "@/components/home/header";
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
-import { Link } from "expo-router";
-import { Text, View, StyleSheet } from "react-native";
+import { Link, router } from "expo-router";
+import { Text, View, StyleSheet, Alert, StatusBar } from "react-native";
 
 const Home = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
 
-  console.log("user", user);
+  console.log("user Home page", user);
+
+  const handleLogout = () => {
+    Alert.alert("Logout", "Are you sure you want to logout?", [
+      { text: "Cancel", style: "cancel" },
+      {
+        text: "Logout",
+        style: "destructive",
+        onPress: async () => {
+          logout();
+          router.replace("/login");
+        },
+      },
+    ]);
+  };
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={"dark-content"} />
+      <Header username={user?.username} onLogout={handleLogout} />
       <Text>Home Page</Text>
-      <Link href="/login">
-        <Text>Go to Login</Text>
-      </Link>
     </View>
   );
 };

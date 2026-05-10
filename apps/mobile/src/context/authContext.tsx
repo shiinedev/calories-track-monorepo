@@ -14,7 +14,6 @@ import {
 import { getAuthToken, saveAuthToken, removeAuthToken } from "@/utils/storage";
 import { createContext, use, useContext, useEffect, useState } from "react";
 import { authApi } from "@/services/auth";
-import { isReadable } from "node:stream";
 
 export interface AuthContextType {
   user: UserWithToken | undefined;
@@ -35,7 +34,6 @@ export interface AuthContextType {
   updateProfile: UseMutationResult<void, Error, UpdateProfileInput, unknown>;
   refetchUser: () => void;
   isLoading: boolean;
-  isReady: boolean;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -43,27 +41,7 @@ export const AuthContext = createContext<AuthContextType | undefined>(
 );
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [isReady, setIsReady] = useState(false);
-  const [hasToken, setHasToken] = useState(false);
-
   const queryClient = useQueryClient();
-
-  useEffect(() => {
-    checkToken();
-  }, []);
-
-  // checkToken
-  const checkToken = async () => {
-    try {
-      const token = await getAuthToken();
-      setHasToken(!!token);
-      setIsReady(true);
-    } catch (error) {
-      setIsReady(true);
-      setHasToken(false);
-      console.error(error);
-    }
-  };
 
   // current User
   const {
@@ -74,11 +52,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   } = useQuery({
     queryKey: ["currentUser"],
     queryFn: () => authApi.getCurrentUser(),
-    enabled: hasToken && isReady,
     retry: false,
     staleTime: 5 * 60 * 1000, // 5 minutes
-    throwOnError: true,
   });
+
+  console.log("is user Loading in context :", isLoading);
 
   useEffect(() => {
     if (userError) {
@@ -118,8 +96,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   });
 
   // logout
-  const logout = () => {
-    authApi.logout();
+  const logout = async () => {
+    await authApi.logout();
     queryClient.setQueryData(["currentUser"], null);
     removeAuthToken();
   };
@@ -141,7 +119,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     isLoading,
     refetchUser,
     isAuthenticated: !!user,
-    isReady,
   };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

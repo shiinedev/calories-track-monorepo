@@ -1,3 +1,4 @@
+import { ReplaceLink } from "@/components/replace-link";
 import {
   Colors,
   spacing,
@@ -108,12 +109,8 @@ export default function Home() {
               )}
             </TouchableOpacity>
             {/*register link */}
-            <View style={styles.registerLink}>
-              <Text style={styles.registerText}>Don't have an account? </Text>
-              <TouchableOpacity onPress={() => router.replace("/register")}>
-                <Text style={styles.registerLinkText}>Register</Text>
-              </TouchableOpacity>
-            </View>
+            <ReplaceLink to="register" />
+            <ReplaceLink to="home" />
           </View>
         </View>
       </ScrollView>
@@ -205,21 +202,5 @@ const styles = StyleSheet.create({
 
   scrollContent: {
     flexGrow: 1,
-  },
-
-  registerLink: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    paddingVertical: spacing.md,
-  },
-  registerText: {
-    color: Colors.textSecondary,
-    fontSize: 16,
-  },
-  registerLinkText: {
-    color: Colors.primary,
-    fontSize: fontSize.md,
-    fontWeight: fontWeight.bold,
   },
 });

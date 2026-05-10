@@ -1,31 +1,21 @@
 import { Colors } from "@/constants/theme";
 import { useAuth } from "@/context/authContext";
-import { getAuthToken } from "@/utils/storage";
 import { Redirect } from "expo-router";
-import { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function IndexScreen() {
-  const { isAuthenticated, user, isLoading, isReady } = useAuth();
+  const { isAuthenticated, user, isLoading } = useAuth();
 
   console.log(
-    "isAuthenticated",
+    "isAuthenticated in index page",
     isAuthenticated,
-    "user",
+    "user in index page",
     user,
-    "isLoading",
+    "isLoading in index page",
     isLoading,
   );
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await getAuthToken();
-      console.log("token ", token);
-    };
-    checkToken();
-  }, []);
-
-  if (!isReady && isLoading) {
+  if (isLoading) {
     return (
       <View
         style={{
@@ -41,7 +31,9 @@ export default function IndexScreen() {
   }
 
   if (isAuthenticated) {
+    console.log("isAuthenticated", isAuthenticated);
     if (user && !user.onBoardingCompleted) {
+      console.log("user", user);
       return <Redirect href="/onboarding" />;
     }
     return <Redirect href="/(tabs)/home" />;

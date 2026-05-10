@@ -55,7 +55,7 @@ export const authApi = {
       return result.user;
     } catch (error) {
       console.error("error getCurrentUser;", error);
-      throw error;
+      // throw error;
     }
   },
 
