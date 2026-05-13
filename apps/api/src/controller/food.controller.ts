@@ -3,7 +3,9 @@ import { foodService } from "../services/food.service.js";
 import type { Request, Response } from "express";
 
 export const scanFood = async (req: Request, res: Response) => {
-  const { file } = req.body;
+  const file = req.file;
+
+  console.log("file in scan ", file);
 
   if (!file) {
     return res
@@ -29,7 +31,7 @@ export const scanFood = async (req: Request, res: Response) => {
 };
 
 export const analyzeImage = async (req: Request, res: Response) => {
-  const { file } = req.body;
+  const file = req.file;
 
   if (!file) {
     req.log.error({ error: "No file uploaded, please provide an image" });

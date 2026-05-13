@@ -10,9 +10,11 @@ export const fileFilter = (
   cb: FileFilterCallback,
 ): void => {
   const allowedMimiTypes = /jpeg|png|gif|webp|jpg/;
+  console.log("file in upload ", file);
 
   const extention = allowedMimiTypes.test(path.extname(file.originalname));
   const mimiType = allowedMimiTypes.test(file.mimetype);
+  console.log("extention ", extention, " mimiType ", mimiType);
 
   if (extention && mimiType) {
     cb(null, true);
