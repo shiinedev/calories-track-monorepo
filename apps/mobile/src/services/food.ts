@@ -1,12 +1,24 @@
 import { AxiosError } from "axios";
 import { api } from "./api";
 import { IFoodResult, ScanFoodResult } from "@/types";
+import { API_URL } from "@/constants/config";
+import { getAuthToken } from "@/utils/storage";
 
 export const foodService = {
   scanFood: async (formData: FormData): Promise<ScanFoodResult> => {
     try {
-      const data = await api.post<ScanFoodResult>("/food/scan", formData);
-      return data;
+      const token = await getAuthToken();
+      if (!token) throw new Error("No token provided");
+      const headers: HeadersInit = {};
+      headers.Authorization = `Bearer ${token}`;
+      const data = await fetch(`${API_URL}/food/scan`, {
+        method: "POST",
+        body: formData,
+        headers,
+      });
+      const res = await data.json();
+      console.log("res", res);
+      return res as ScanFoodResult;
     } catch (error) {
       console.error("Error scanning food", error);
       throw (
@@ -18,6 +30,7 @@ export const foodService = {
   analyzeImage: async (formData: FormData): Promise<IFoodResult> => {
     try {
       const data = await api.post<IFoodResult>("/food/analyze", formData);
+
       return data;
     } catch (error) {
       console.error("Error analyzing image", error);

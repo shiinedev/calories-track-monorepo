@@ -60,6 +60,7 @@ export interface IFoodResult extends Timestamp {
   timestamp: Date;
   imageURl: string;
   storageKey: string;
+  description: string;
 }
 
 export interface ScanFoodResult extends Omit<
@@ -67,4 +68,5 @@ export interface ScanFoodResult extends Omit<
   "timestamp" | "userId"
 > {
   imageBase64: string;
+  description: string;
 }

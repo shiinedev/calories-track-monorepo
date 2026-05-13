@@ -6,14 +6,14 @@ import { ActivityIndicator, View } from "react-native";
 export default function IndexScreen() {
   const { isAuthenticated, user, isLoading } = useAuth();
 
-  console.log(
-    "isAuthenticated in index page",
-    isAuthenticated,
-    "user in index page",
-    user,
-    "isLoading in index page",
-    isLoading,
-  );
+  // console.log(
+  //   "isAuthenticated in index page",
+  //   isAuthenticated,
+  //   "user in index page",
+  //   user,
+  //   "isLoading in index page",
+  //   isLoading,
+  // );
 
   if (isLoading) {
     return (

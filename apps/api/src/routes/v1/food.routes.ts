@@ -1,3 +1,4 @@
+import { asyncHandler } from "@/utils/async-handler.js";
 import {
   saveFoodEntry,
   scanFood,
@@ -12,14 +13,24 @@ import { Router } from "express";
 
 const foodRoutes = Router();
 
-foodRoutes.post("/scan", requireToken, upload.single("image"), scanFood);
-foodRoutes.post("/analyze", requireToken, upload.single("image"), analyzeImage);
+foodRoutes.post(
+  "/scan",
+  requireToken,
+  upload.single("image"),
+  asyncHandler(scanFood),
+);
+foodRoutes.post(
+  "/analyze",
+  requireToken,
+  upload.single("image"),
+  asyncHandler(analyzeImage),
+);
 foodRoutes.post(
   "/save",
   requireToken,
   validateSchema(saveFoodEntrySchema),
   saveFoodEntry,
 );
-foodRoutes.post("/discard", requireToken, discardAnalyzedFood);
+foodRoutes.post("/discard", requireToken, asyncHandler(discardAnalyzedFood));
 
 export default foodRoutes;

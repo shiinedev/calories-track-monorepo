@@ -167,6 +167,7 @@ export class FoodService implements IFood {
           protein: messages.parsed.protein,
           carbs: messages.parsed.carbs,
           mealType: messages.parsed.mealType,
+          description: messages.parsed.description,
         };
       }
 

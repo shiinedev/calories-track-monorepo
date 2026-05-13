@@ -10,8 +10,9 @@ export type ScanFoodReturn<T> = T extends "base64"
       imageBase64: string;
       imageUrl: string;
       storageKey: string;
+      description: string;
     }
-  : IFoodModel;
+  : IFoodModel & { description: string };
 
 export interface IFood {
   scanFood<T extends ImageType>(
