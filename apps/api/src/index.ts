@@ -9,7 +9,7 @@ import { logger } from "./utils/logger.js";
 const app: Express = express();
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true, limit: "1omb" }));
 // app.use(
 //   cors({
 //     origin: process.env.FRONT_END_URL,
