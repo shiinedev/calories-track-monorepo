@@ -8,9 +8,10 @@ export type ImageType = "model" | "base64";
 export type ScanFoodReturn<T> = T extends "base64"
   ? FoodAnalysisResult & {
       imageBase64: string;
-      imageUrl: string;
+      imageURl: string;
       storageKey: string;
       description: string;
+      timestamp: Date;
     }
   : IFoodModel & { description: string };
 

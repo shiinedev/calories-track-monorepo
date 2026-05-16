@@ -51,6 +51,74 @@ export default function ImagePickerExample({
     }
   };
 
+  const requestCameraPermission = async (): Promise<boolean> => {
+    const { status: cameraStatus } =
+      await ImagePicker.requestCameraPermissionsAsync();
+    const { status: mediaStatus } =
+      await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+    if (cameraStatus !== "granted" || mediaStatus !== "granted") {
+      Alert.alert(
+        "Permission Required",
+        "we need your permission to access your camera and media library",
+        [{ text: "OK" }],
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleImagePicker = async (source: "camera" | "gallery") => {
+    const hasPermission = await requestCameraPermission();
+    if (!hasPermission) return;
+
+    let result: ImagePicker.ImagePickerResult;
+    if (source === "camera") {
+      result = await ImagePicker.launchCameraAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    } else {
+      result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ["images"],
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    }
+
+    if (!result.canceled && result.assets && result.assets[0]) {
+      onChangeImage(result.assets[0]);
+    }
+  };
+
+  const showImagePickerOptions = () => {
+    Alert.alert(
+      "Select Image Source",
+      "Choose an image from your camera or gallery",
+      [
+        {
+          text: "Camera",
+          onPress: () => handleImagePicker("camera"),
+        },
+        {
+          text: "Gallery",
+          onPress: () => handleImagePicker("gallery"),
+        },
+        {
+          text: "Cancel",
+          style: "cancel",
+        },
+      ],
+      {
+        cancelable: true,
+      },
+    );
+  };
+
   return (
     <View style={styles.container}>
       {image && (
@@ -71,7 +139,7 @@ export default function ImagePickerExample({
         </View>
       )}
       <TouchableOpacity
-        onPress={pickImage}
+        onPress={showImagePickerOptions}
         activeOpacity={0.7}
         style={[styles.imagePickerButton, isPending && styles.disabled]}
         disabled={isPending}

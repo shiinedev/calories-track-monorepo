@@ -52,15 +52,14 @@ export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
 export interface IFoodResult extends Timestamp {
   userId: string;
   foodname: string;
+  description: string;
   calories: number;
   fat: number;
   protein: number;
   carbs: number;
   mealType: MealType;
-  timestamp: Date;
   imageURl: string;
   storageKey: string;
-  description: string;
 }
 
 export interface ScanFoodResult extends Omit<
@@ -70,3 +69,5 @@ export interface ScanFoodResult extends Omit<
   imageBase64: string;
   description: string;
 }
+
+export type SaveFoodEntryInput = ScanFoodResult;

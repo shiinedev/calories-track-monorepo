@@ -10,6 +10,8 @@ export const FoodAnalysisSchema = z.object({
   protein: z.number().describe("The protein content of the food"),
   carbs: z.number().describe("The carbohydrate content of the food"),
   mealType: MealTypeSchema.describe("The type of meal the food is for"),
+  timestamp: z.date().describe("The timestamp of the food entry"),
+  imageURl: z.string().describe("The URL of the food image"),
 });
 
 // export type MealType = z.infer<typeof MealTypeSchema>;

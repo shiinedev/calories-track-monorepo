@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { api } from "./api";
-import { IFoodResult, ScanFoodResult } from "@/types";
+import { IFoodResult, SaveFoodEntryInput, ScanFoodResult } from "@/types";
 import { API_URL } from "@/constants/config";
 import { getAuthToken } from "@/utils/storage";
 
@@ -17,14 +17,11 @@ export const foodService = {
         headers,
       });
       const res = await data.json();
-      console.log("res", res);
-      return res as ScanFoodResult;
+
+      return res?.food as ScanFoodResult;
     } catch (error) {
       console.error("Error scanning food", error);
-      throw (
-        (error as AxiosError<{ message: string }>)?.response?.data?.message ??
-        "Error scanning food"
-      );
+      throw error;
     }
   },
   analyzeImage: async (formData: FormData): Promise<IFoodResult> => {
@@ -40,9 +37,9 @@ export const foodService = {
       );
     }
   },
-  saveFood: async (formData: FormData): Promise<IFoodResult> => {
+  saveFood: async (foodData: SaveFoodEntryInput): Promise<IFoodResult> => {
     try {
-      const data = await api.post<IFoodResult>("/food/save", formData);
+      const data = await api.post<IFoodResult>("/food/save", foodData);
       return data;
     } catch (error) {
       console.error("Error saving food", error);

@@ -44,6 +44,7 @@ const FoodPreviewModal = ({
     totalMacros > 0 ? ((foodData.carbs || 0) / totalMacros) * 100 : 0;
   const fatPercent =
     totalMacros > 0 ? ((foodData.fat || 0) / totalMacros) * 100 : 0;
+  console.log("foodData in FoodPreviewModal", foodData.foodname);
 
   // for dev
 
@@ -72,19 +73,16 @@ const FoodPreviewModal = ({
             </View>
 
             {/* Food Image */}
-            {(foodData.imageBase64 || foodData.imageURl) && (
+            {foodData.imageBase64 && (
               <View style={styles.imageContainer}>
                 <Image
-                  source={foodData.imageBase64 || foodData?.imageURl}
+                  source={foodData.imageBase64}
                   style={styles.image}
                   contentFit="cover"
                   transition={200}
                   onError={(error) => {
                     console.log("❌ Image load error:", error);
-                    console.log(
-                      "Image source:",
-                      foodData.imageBase64 ? "base64" : foodData.imageURl,
-                    );
+                    console.log("Image source:", foodData.imageBase64);
                   }}
                   onLoad={() => {
                     console.log(

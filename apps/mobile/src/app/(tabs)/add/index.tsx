@@ -20,7 +20,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { useState } from "react";
-import { useAnalyzeFood, useSaveFood, useScanFood } from "@/hooks/use-food";
+import { useDiscardFood, useSaveFood, useScanFood } from "@/hooks/use-food";
 import FoodPreviewModal from "@/components/add/food-preview-modal";
 import { TextInput } from "react-native";
 import { ScanFoodResult } from "@/types";
@@ -34,48 +34,81 @@ export const Add = () => {
 
   const scanMutation = useScanFood();
   const saveFood = useSaveFood();
+  const discardMutation = useDiscardFood();
 
   const onChangeImage = (image: ImagePicker.ImagePickerAsset | null) => {
     setImage(image);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!image) {
       Alert.alert("Error", "Please select an image before submitting.");
       return;
     }
-    console.log(image);
-
-    const urlParst = image.uri.split(".");
-    const fileName = urlParst[urlParst.length - 1];
-    const fileType = image.type ?? fileName.split(".")[1];
 
     // @ts-ignore
     const formData = new FormData();
     formData.append("image", {
       uri: image?.uri,
-      type: `image/${fileType}`,
-      name: `image_${fileName}`,
+      type: image.mimeType || "image/jpeg",
+      name: image.fileName || "image.jpg",
     } as any);
 
     console.log("FormData", formData);
 
-    scanMutation.mutateAsync(formData, {
+    await scanMutation.mutateAsync(formData, {
       onSuccess: (data) => {
         setOpenModel(true);
+        console.log("ScanFoodResult", {
+          foodname: data.foodname,
+          description: data.description,
+        });
+        Alert.alert(
+          "Success",
+          `Food scanned successfully${
+            data.foodname ? `: ${data.foodname}` : ""
+          }`,
+        );
         setFoodName(data.foodname);
         setDescription(data.description);
         setFoodData(data);
+      },
+      onError: (error) => {
+        Alert.alert("Error for Scanning food", error.message);
       },
     });
   };
 
   const handleDecline = () => {
     setOpenModel(false);
+    setFoodData(null);
   };
 
-  const handleAccept = () => {
-    console.log("foodData", foodData);
+  const handleAccept = async () => {
+    console.log("foodData in handleAccept", {
+      foodname: foodData?.foodname,
+      description: foodData?.description,
+    });
+
+    if (!foodData) {
+      Alert.alert("Error", "No food data available.");
+      return;
+    }
+
+    try {
+      await saveFood.mutateAsync(foodData, {
+        onSuccess: () => {
+          Alert.alert("Success", "Food saved successfully.");
+          setOpenModel(false);
+          setFoodData(null);
+        },
+        onError: (error) => {
+          Alert.alert("Error", (error as Error).message);
+        },
+      });
+    } catch (error) {
+      Alert.alert("Error", (error as Error).message);
+    }
   };
 
   return (

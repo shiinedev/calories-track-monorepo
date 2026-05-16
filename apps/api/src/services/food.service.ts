@@ -49,7 +49,6 @@ export class FoodService implements IFood {
         return {
           ...result,
           imageBase64,
-          imageUrl: url,
           storageKey: key,
         } as ScanFoodReturn<T>;
       }
@@ -137,7 +136,7 @@ export class FoodService implements IFood {
     }
   }
 
-  async analyzeFood(imageUrl: string): Promise<FoodAnalysisResult> {
+  async analyzeFood(imageURl: string): Promise<FoodAnalysisResult> {
     try {
       const completion = await this.openai.chat.completions.parse({
         model: "gpt-4o-mini",
@@ -150,7 +149,7 @@ export class FoodService implements IFood {
           {
             role: "user",
             type: "image_url",
-            content: imageUrl,
+            content: imageURl,
           },
         ],
         response_format: zodResponseFormat(FoodAnalysisSchema, "foodAnalys"),
@@ -168,6 +167,8 @@ export class FoodService implements IFood {
           carbs: messages.parsed.carbs,
           mealType: messages.parsed.mealType,
           description: messages.parsed.description,
+          imageURl: imageURl,
+          timestamp: new Date(),
         };
       }
 
@@ -177,10 +178,10 @@ export class FoodService implements IFood {
         );
       }
 
-      throw new Error(`Failed to parse food analysis result for ${imageUrl}`);
+      throw new Error(`Failed to parse food analysis result for ${imageURl}`);
     } catch (error) {
       logger.error({
-        message: `Failed to analyze food: ${imageUrl}`,
+        message: `Failed to analyze food: ${imageURl}`,
         error,
       });
       throw error;
@@ -191,7 +192,16 @@ export class FoodService implements IFood {
     input: SaveFoodEntryResult,
     userId: string,
   ): Promise<IFoodModel> {
-    const { calories, fat, protein, carbs, mealType, storageKey } = input;
+    const {
+      calories,
+      fat,
+      protein,
+      carbs,
+      mealType,
+      storageKey,
+      timestamp,
+      imageURl,
+    } = input;
 
     try {
       const foodEntry = await FoodModel.create({
@@ -202,6 +212,8 @@ export class FoodService implements IFood {
         carbs,
         mealType,
         storageKey,
+        timestamp,
+        imageURl,
       });
       return foodEntry;
     } catch (error) {

@@ -27,7 +27,7 @@ export const useAnalyzeFood = () => {
   });
 };
 
-export const useDiscoverFood = () => {
+export const useDiscardFood = () => {
   return useMutation({
     mutationFn: foodService.discardFood,
   });
