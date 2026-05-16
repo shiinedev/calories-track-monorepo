@@ -203,6 +203,11 @@ export class FoodService implements IFood {
       imageURl,
     } = input;
 
+    logger.info({
+      message: `Saving food entry input`,
+      input,
+    });
+
     try {
       const foodEntry = await FoodModel.create({
         userId,
@@ -214,6 +219,10 @@ export class FoodService implements IFood {
         storageKey,
         timestamp,
         imageURl,
+      });
+      logger.info({
+        message: `Saved food entry result`,
+        foodEntry,
       });
       return foodEntry;
     } catch (error) {
