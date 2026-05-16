@@ -29,7 +29,7 @@ foodRoutes.post(
   "/save",
   requireToken,
   validateSchema(saveFoodEntrySchema),
-  saveFoodEntry,
+  asyncHandler(saveFoodEntry),
 );
 foodRoutes.post("/discard", requireToken, asyncHandler(discardAnalyzedFood));
 

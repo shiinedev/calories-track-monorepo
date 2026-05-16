@@ -168,7 +168,7 @@ export class FoodService implements IFood {
           mealType: messages.parsed.mealType,
           description: messages.parsed.description,
           imageURl: imageURl,
-          timestamp: new Date(),
+          timestamp: new Date().toISOString(),
         };
       }
 
@@ -201,6 +201,8 @@ export class FoodService implements IFood {
       storageKey,
       timestamp,
       imageURl,
+      foodname,
+      description,
     } = input;
 
     logger.info({
@@ -210,6 +212,7 @@ export class FoodService implements IFood {
 
     try {
       const foodEntry = await FoodModel.create({
+        foodname,
         userId,
         calories,
         fat,

@@ -49,7 +49,7 @@ export type Feature = {
 
 export type MealType = "breakfast" | "lunch" | "dinner" | "snack";
 
-export interface IFoodResult extends Timestamp {
+export interface IFoodResult {
   userId: string;
   foodname: string;
   description: string;
@@ -60,12 +60,10 @@ export interface IFoodResult extends Timestamp {
   mealType: MealType;
   imageURl: string;
   storageKey: string;
+  timestamp: string;
 }
 
-export interface ScanFoodResult extends Omit<
-  IFoodResult,
-  "timestamp" | "userId"
-> {
+export interface ScanFoodResult extends Omit<IFoodResult, "userId"> {
   imageBase64: string;
   description: string;
 }
