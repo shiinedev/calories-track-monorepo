@@ -50,9 +50,9 @@ export const foodService = {
     }
   },
 
-  discardFood: async (formData: FormData): Promise<IFoodResult> => {
+  discardFood: async (storageKey: string): Promise<IFoodResult> => {
     try {
-      const data = await api.post<IFoodResult>("/food/discard", formData);
+      const data = await api.post<IFoodResult>("/food/discard", { storageKey });
       return data;
     } catch (error) {
       console.error("Error discarding food", error);

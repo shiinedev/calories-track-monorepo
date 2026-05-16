@@ -79,9 +79,21 @@ export const Add = () => {
     });
   };
 
-  const handleDecline = () => {
-    setOpenModel(false);
-    setFoodData(null);
+  const handleDecline = async () => {
+    if (!foodData) {
+      Alert.alert("Error", "No food data available.");
+      return;
+    }
+
+    await discardMutation.mutateAsync(foodData.storageKey, {
+      onSuccess: () => {
+        setOpenModel(false);
+        setFoodData(null);
+      },
+      onError: (error) => {
+        Alert.alert("Error", error.message);
+      },
+    });
   };
 
   const handleAccept = async () => {
