@@ -69,3 +69,5 @@ export interface ScanFoodResult extends Omit<IFoodResult, "userId"> {
 }
 
 export type SaveFoodEntryInput = ScanFoodResult;
+
+export type FoodEntry = Omit<ScanFoodResult, "description" | "imageBase64">;

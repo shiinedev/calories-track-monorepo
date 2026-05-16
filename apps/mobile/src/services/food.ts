@@ -1,6 +1,11 @@
 import { AxiosError } from "axios";
 import { api } from "./api";
-import { IFoodResult, SaveFoodEntryInput, ScanFoodResult } from "@/types";
+import {
+  FoodEntry,
+  IFoodResult,
+  SaveFoodEntryInput,
+  ScanFoodResult,
+} from "@/types";
 import { API_URL } from "@/constants/config";
 import { getAuthToken } from "@/utils/storage";
 
@@ -59,6 +64,21 @@ export const foodService = {
       throw (
         (error as AxiosError<{ message: string }>)?.response?.data?.message ??
         "Error discarding food"
+      );
+    }
+  },
+
+  getFoodEntries: async (date: string): Promise<FoodEntry[]> => {
+    try {
+      const data = await api.get<FoodEntry[]>("/food/entries", {
+        params: { date },
+      });
+      return data;
+    } catch (error) {
+      console.error("Error getting food entries", error);
+      throw (
+        (error as AxiosError<{ message: string }>)?.response?.data?.message ??
+        "Error getting food entries"
       );
     }
   },

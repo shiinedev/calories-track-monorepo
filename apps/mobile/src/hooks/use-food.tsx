@@ -1,5 +1,5 @@
 import { foodService } from "@/services/food";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useSaveFood = () => {
   const queryClient = useQueryClient();
@@ -30,5 +30,13 @@ export const useAnalyzeFood = () => {
 export const useDiscardFood = () => {
   return useMutation({
     mutationFn: foodService.discardFood,
+  });
+};
+
+export const useGetFoodEntries = (date: string) => {
+  return useQuery({
+    queryKey: ["food", date],
+    queryFn: () => foodService.getFoodEntries(date),
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 };
