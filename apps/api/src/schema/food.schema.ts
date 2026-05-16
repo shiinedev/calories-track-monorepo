@@ -1,3 +1,4 @@
+import { MealType } from "@calorie-track/types/report.types.ts";
 import z from "zod";
 
 export const MealTypeSchema = z.enum(["breakfast", "lunch", "dinner", "snack"]);

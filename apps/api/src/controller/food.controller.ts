@@ -92,3 +92,33 @@ export const discardAnalyzedFood = async (req: Request, res: Response) => {
     message: "Analyzed food discarded successfully",
   });
 };
+
+export const getFoodEntries = async (req: Request, res: Response) => {
+  if (!req.user) {
+    logger.error({ error: "Unauthorized" });
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const userId = req.user._id.toString();
+  const date = req.query.date ? new Date(req.query.date as string) : new Date();
+
+  const startDate = new Date(date);
+  startDate.setHours(0, 0, 0, 0);
+  const endDate = new Date(startDate);
+  endDate.setHours(23, 59, 59, 999);
+
+  logger.info({
+    message: `Fetching food entries for date from controller`,
+    date: date.toISOString(),
+    startDate: startDate.toISOString(),
+    endDate: endDate.toISOString(),
+    userId,
+  });
+
+  const entries = await foodService.getFoodEntries(startDate, endDate, userId);
+
+  return res.status(200).json({
+    message: "Food entries retrieved successfully",
+    entries,
+  });
+};

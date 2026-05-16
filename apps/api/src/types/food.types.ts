@@ -15,6 +15,9 @@ export type ScanFoodReturn<T> = T extends "base64"
     }
   : IFoodModel & { description: string };
 
+export type FoodEntry = Omit<FoodAnalysisResult, "description"> & {
+  id: string;
+};
 export interface IFood {
   scanFood<T extends ImageType>(
     file: Buffer,
@@ -29,4 +32,9 @@ export interface IFood {
     userId: string,
   ): Promise<IFoodModel>;
   discardAnalyzedFood(storageKey: string): Promise<void>;
+  getFoodEntries(
+    startDate: Date,
+    endDate: Date,
+    userId: string,
+  ): Promise<FoodEntry[]>;
 }

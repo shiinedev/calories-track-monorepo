@@ -4,6 +4,7 @@ import {
   scanFood,
   analyzeImage,
   discardAnalyzedFood,
+  getFoodEntries,
 } from "../../controller/food.controller.js";
 import { requireToken } from "../../middleware/auth.js";
 import { upload } from "../../middleware/upload.js";
@@ -32,5 +33,6 @@ foodRoutes.post(
   asyncHandler(saveFoodEntry),
 );
 foodRoutes.post("/discard", requireToken, asyncHandler(discardAnalyzedFood));
+foodRoutes.get("/", requireToken, asyncHandler(getFoodEntries));
 
 export default foodRoutes;

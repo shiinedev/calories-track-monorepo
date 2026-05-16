@@ -11,7 +11,12 @@ import { r2Config } from "../config/r2.js";
 import { OpenAI } from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import FoodModel, { IFoodModel } from "../models/food.model.js";
-import type { ImageType, ScanFoodReturn, IFood } from "../types/food.types.js";
+import type {
+  ImageType,
+  ScanFoodReturn,
+  IFood,
+  FoodEntry,
+} from "../types/food.types.js";
 import { logger } from "../utils/logger.js";
 
 export class FoodService implements IFood {
@@ -202,7 +207,6 @@ export class FoodService implements IFood {
       timestamp,
       imageURl,
       foodname,
-      description,
     } = input;
 
     logger.info({
@@ -253,6 +257,45 @@ export class FoodService implements IFood {
     } catch (error) {
       logger.error({
         message: `Failed to discard analyzed food: ${storageKey}`,
+        error,
+      });
+      throw error;
+    }
+  }
+
+  async getFoodEntries(
+    startDate: Date,
+    endDate: Date,
+    userId: string,
+  ): Promise<Omit<FoodEntry[], "description">> {
+    try {
+      const entries = await FoodModel.find({
+        userId: userId,
+        timestamp: {
+          $gte: new Date(startDate),
+          $lt: new Date(endDate),
+        },
+      });
+      const mappedEntries = entries.map((entry) => {
+        return {
+          id: entry._id.toString(),
+          foodname: entry.foodname,
+          calories: entry.calories,
+          fat: entry.fat,
+          protein: entry.protein,
+          carbs: entry.carbs,
+          mealType: entry.mealType,
+          imageURl: entry.imageURl,
+          timestamp: entry.timestamp.toISOString(),
+        };
+      });
+      return mappedEntries as FoodEntry[];
+    } catch (error) {
+      logger.error({
+        message: `Failed to get food entries for date`,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString(),
+        userId,
         error,
       });
       throw error;
