@@ -3,7 +3,7 @@ import z from "zod";
 export const MealTypeSchema = z.enum(["breakfast", "lunch", "dinner", "snack"]);
 
 export const FoodAnalysisSchema = z.object({
-  foodName: z.string().describe("The name of the food"),
+  foodname: z.string().describe("The name of the food"),
   description: z.string().describe("The description of the food"),
   calories: z.number().describe("The cloorie intensity of the food"),
   fat: z.number().describe("The fat content of the food"),

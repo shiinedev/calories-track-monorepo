@@ -37,7 +37,7 @@ export class FoodService implements IFood {
 
       // Analyze the food using the uploaded image to opena ai
       const result = await this.analyzeFood(url);
-      logger.info({ message: `Analyzed food: ${result.foodName}` });
+      logger.info({ message: `Analyzed food: ${result.foodname}` });
 
       logger.info({ message: `userId: ${userId}` });
 
@@ -55,7 +55,7 @@ export class FoodService implements IFood {
       }
       const food: IFoodModel = await FoodModel.create({
         userId,
-        foodname: result.foodName,
+        foodname: result.foodname,
         calories: result.calories,
         fat: result.fat,
         protein: result.protein,
@@ -161,7 +161,7 @@ export class FoodService implements IFood {
 
       if (messages?.parsed) {
         return {
-          foodName: messages.parsed.foodName,
+          foodname: messages.parsed.foodname,
           calories: messages.parsed.calories,
           fat: messages.parsed.fat,
           protein: messages.parsed.protein,
